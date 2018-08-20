@@ -1,0 +1,301 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yaic.auth.thirdparty.dao.AuthCallbackInfoDao" >
+  <resultMap id="BaseResultMap" type="com.yaic.auth.thirdparty.model.AuthCallbackInfoModel" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="app_id" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="project_code" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="data_source" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="business_no" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="deal_type" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="deal_status" jdbcType="BIT" javaType="java.lang.Boolean" />
+      <arg column="deal_count" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="created_user" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="created_date" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="updated_user" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="updated_date" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="invalid_flag" jdbcType="BIT" javaType="java.lang.Boolean" />
+    </constructor>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.yaic.auth.thirdparty.model.AuthCallbackInfoModel" >
+    <constructor >
+      <idArg column="id" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="app_id" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="project_code" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="data_source" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="business_no" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="deal_type" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="deal_status" jdbcType="BIT" javaType="java.lang.Boolean" />
+      <arg column="deal_count" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="created_user" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="created_date" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="updated_user" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="updated_date" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="invalid_flag" jdbcType="BIT" javaType="java.lang.Boolean" />
+      <arg column="content" jdbcType="LONGVARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, app_id, project_code, data_source, business_no, deal_type, deal_status, deal_count, 
+    created_user, created_date, updated_user, updated_date, invalid_flag
+  </sql>
+  <sql id="Blob_Column_List" >
+    content
+  </sql>
+
+
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from t_auth_callback_info
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+
+
+  <select id="countExistItemSelective" parameterType="java.util.Map" resultType="java.lang.Integer">
+    select
+      count(id)
+    from t_auth_callback_info
+    <trim prefix="where" prefixOverrides="AND|OR">
+      <if test="appId != null and appId != ''" >
+        and app_id = #{appId,jdbcType=VARCHAR}
+      </if>
+      <if test="projectCode != null and projectCode != ''" >
+        and project_code = #{projectCode,jdbcType=VARCHAR}
+      </if>
+      <if test="dataSource != null and dataSource != ''" >
+        and data_source = #{dataSource,jdbcType=VARCHAR}
+      </if>
+      <if test="businessNo != null and businessNo != ''" >
+        and business_no = #{businessNo,jdbcType=VARCHAR}
+      </if>
+      <if test="dealType != null and dealType != ''" >
+        and deal_type = #{dealType,jdbcType=VARCHAR}
+      </if>
+    </trim>
+  </select>
+
+
+  <select id="selectUnsuccessCallbackInfo"
+          parameterType="java.util.Map"
+          resultType="com.yaic.auth.thirdparty.model.AuthCallbackInfoModel">
+      select
+        id, app_id as appId, deal_count as dealCount, content, callback_url as callbackUrl
+      from
+        t_auth_callback_info
+      where
+        deal_type = #{dealType,jdbcType=VARCHAR} and deal_status = 0 and invalid_flag = 0
+  </select>
+
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from t_auth_callback_info
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+
+
+
+  <insert id="insert" parameterType="com.yaic.auth.thirdparty.model.AuthCallbackInfoModel" >
+    insert into t_auth_callback_info (id, app_id, project_code, 
+      data_source, business_no, deal_type, 
+      deal_status, deal_count, created_user, 
+      created_date, updated_user, updated_date, 
+      invalid_flag, content)
+    values (#{id,jdbcType=INTEGER}, #{appId,jdbcType=VARCHAR}, #{projectCode,jdbcType=VARCHAR}, 
+      #{dataSource,jdbcType=VARCHAR}, #{businessNo,jdbcType=VARCHAR}, #{dealType,jdbcType=VARCHAR}, 
+      #{dealStatus,jdbcType=BIT}, #{dealCount,jdbcType=INTEGER}, #{createdUser,jdbcType=VARCHAR}, 
+      #{createdDate,jdbcType=TIMESTAMP}, #{updatedUser,jdbcType=VARCHAR}, #{updatedDate,jdbcType=TIMESTAMP}, 
+      #{invalidFlag,jdbcType=BIT}, #{content,jdbcType=LONGVARCHAR})
+  </insert>
+
+
+
+  <insert id="insertSelective" parameterType="com.yaic.auth.thirdparty.model.AuthCallbackInfoModel"
+          useGeneratedKeys="true" keyProperty="id">
+    insert into t_auth_callback_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="appId != null" >
+        app_id,
+      </if>
+      <if test="projectCode != null" >
+        project_code,
+      </if>
+      <if test="dataSource != null" >
+        data_source,
+      </if>
+      <if test="businessNo != null" >
+        business_no,
+      </if>
+      <if test="dealType != null" >
+        deal_type,
+      </if>
+      <if test="dealStatus != null" >
+        deal_status,
+      </if>
+      <if test="dealCount != null" >
+        deal_count,
+      </if>
+      <if test="callbackUrl != null and callbackUrl !=''" >
+        callbackUrl,
+      </if>
+      <if test="createdUser != null" >
+        created_user,
+      </if>
+      <if test="createdDate != null" >
+        created_date,
+      </if>
+      <if test="updatedUser != null" >
+        updated_user,
+      </if>
+      <if test="updatedDate != null" >
+        updated_date,
+      </if>
+      <if test="invalidFlag != null" >
+        invalid_flag,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="appId != null" >
+        #{appId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectCode != null" >
+        #{projectCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dataSource != null" >
+        #{dataSource,jdbcType=VARCHAR},
+      </if>
+      <if test="businessNo != null" >
+        #{businessNo,jdbcType=VARCHAR},
+      </if>
+      <if test="dealType != null" >
+        #{dealType,jdbcType=VARCHAR},
+      </if>
+      <if test="dealStatus != null" >
+        #{dealStatus,jdbcType=BIT},
+      </if>
+      <if test="dealCount != null" >
+        #{dealCount,jdbcType=INTEGER},
+      </if>
+      <if test="callbackUrl != null and callbackUrl != ''" >
+        #{callbackUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createdUser != null" >
+        #{createdUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null" >
+        #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedUser != null" >
+        #{updatedUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null" >
+        #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="invalidFlag != null" >
+        #{invalidFlag,jdbcType=BIT},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+
+
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.yaic.auth.thirdparty.model.AuthCallbackInfoModel" >
+    update t_auth_callback_info
+    <set >
+      <if test="appId != null" >
+        app_id = #{appId,jdbcType=VARCHAR},
+      </if>
+      <if test="projectCode != null" >
+        project_code = #{projectCode,jdbcType=VARCHAR},
+      </if>
+      <if test="dataSource != null" >
+        data_source = #{dataSource,jdbcType=VARCHAR},
+      </if>
+      <if test="businessNo != null" >
+        business_no = #{businessNo,jdbcType=VARCHAR},
+      </if>
+      <if test="dealType != null" >
+        deal_type = #{dealType,jdbcType=VARCHAR},
+      </if>
+      <if test="dealStatus != null" >
+        deal_status = #{dealStatus,jdbcType=BIT},
+      </if>
+      <if test="dealCount != null" >
+        deal_count = #{dealCount,jdbcType=INTEGER},
+      </if>
+      <if test="createdUser != null" >
+        created_user = #{createdUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createdDate != null" >
+        created_date = #{createdDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedUser != null" >
+        updated_user = #{updatedUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updatedDate != null" >
+        updated_date = #{updatedDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="invalidFlag != null" >
+        invalid_flag = #{invalidFlag,jdbcType=BIT},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yaic.auth.thirdparty.model.AuthCallbackInfoModel" >
+    update t_auth_callback_info
+    set app_id = #{appId,jdbcType=VARCHAR},
+      project_code = #{projectCode,jdbcType=VARCHAR},
+      data_source = #{dataSource,jdbcType=VARCHAR},
+      business_no = #{businessNo,jdbcType=VARCHAR},
+      deal_type = #{dealType,jdbcType=VARCHAR},
+      deal_status = #{dealStatus,jdbcType=BIT},
+      deal_count = #{dealCount,jdbcType=INTEGER},
+      created_user = #{createdUser,jdbcType=VARCHAR},
+      created_date = #{createdDate,jdbcType=TIMESTAMP},
+      updated_user = #{updatedUser,jdbcType=VARCHAR},
+      updated_date = #{updatedDate,jdbcType=TIMESTAMP},
+      invalid_flag = #{invalidFlag,jdbcType=BIT},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+
+
+
+  <update id="updateByPrimaryKey" parameterType="com.yaic.auth.thirdparty.model.AuthCallbackInfoModel" >
+    update t_auth_callback_info
+    set app_id = #{appId,jdbcType=VARCHAR},
+      project_code = #{projectCode,jdbcType=VARCHAR},
+      data_source = #{dataSource,jdbcType=VARCHAR},
+      business_no = #{businessNo,jdbcType=VARCHAR},
+      deal_type = #{dealType,jdbcType=VARCHAR},
+      deal_status = #{dealStatus,jdbcType=BIT},
+      deal_count = #{dealCount,jdbcType=INTEGER},
+      created_user = #{createdUser,jdbcType=VARCHAR},
+      created_date = #{createdDate,jdbcType=TIMESTAMP},
+      updated_user = #{updatedUser,jdbcType=VARCHAR},
+      updated_date = #{updatedDate,jdbcType=TIMESTAMP},
+      invalid_flag = #{invalidFlag,jdbcType=BIT}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

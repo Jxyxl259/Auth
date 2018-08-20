@@ -1,0 +1,54 @@
+#端口
+server:
+  port: 8080
+  connection-timeout: 5000
+  tomcat:
+    uri-encoding: UTF-8
+    #允许最大线程数
+    max-threads: 2000
+    #最大排队数
+    accept-count: 1000
+    min-spare-threads: 200
+    max-connections: 5000
+    accesslog:
+      enabled: true
+      #文件格式 %t %a "%r" %s (%D ms)
+      pattern: pattern=remote_ip=%a local_ip=%A bytes=%b Bytes=%B  protocol=%H method=%m port=%p  url=%r code=%s sessionid=%S date=%t  millis=%D threadid=%I
+      #前缀
+      prefix: access_log
+      rename-on-rotate: true
+      request-attributes-enabled: false
+      #日志切换
+      rotate: true
+      #缓冲输出 定期刷新
+      buffered: true
+      suffix: .log
+      directory: /app/logs/tomcat
+
+#mysql jdbc
+spring:
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://10.1.135.155:3306/auth_sit
+    username: sit_auth
+    password: 1qaz@WSX
+    druid:
+      initialSize: 5
+      minIdle: 5
+      maxActive: 20
+      maxWait: 60000
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      poolPreparedStatements: true
+      maxPoolPreparedStatementPerConnectionSize: 20
+      filters: stat,wall,log4j
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      useGlobalDataSourceStat: true
+
+logging:
+  #加载日志文件
+  config: classpath:logback-springboot.xml

@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yaic.auth.thirdparty.dao.ProjectDao">
+	<resultMap id="BaseResultMap" type="com.yaic.auth.thirdparty.model.ProjectModel">
+		<id column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="project_code" jdbcType="VARCHAR" property="projectCode" />
+		<result column="project_name" jdbcType="VARCHAR" property="projectName" />
+		<result column="account_id" jdbcType="INTEGER" property="accountId" />
+		<result column="auth_id" jdbcType="INTEGER" property="authId" />
+		<result column="data_source_id" jdbcType="INTEGER" property="dataSourceId" />
+		<result column="valid_flag" jdbcType="INTEGER" property="validFlag" />
+		<result column="is_default" jdbcType="INTEGER" property="isDefault" />
+		<result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+		<result column="created_user" jdbcType="VARCHAR" property="createdUser" />
+		<result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+		<result column="updated_user" jdbcType="VARCHAR" property="updatedUser" />
+	</resultMap>
+
+	<resultMap id="ProjectViewMap" type="com.yaic.auth.thirdparty.dto.ProjectViewDto">
+		<id column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="project_code" jdbcType="VARCHAR" property="projectCode" />
+		<result column="project_name" jdbcType="VARCHAR" property="projectName" />
+		<result column="account_id" jdbcType="INTEGER" property="accountId" />
+		<result column="auth_id" jdbcType="INTEGER" property="authId" />
+		<result column="source_name" jdbcType="VARCHAR" property="sourceName" />
+		<result column="valid_flag" jdbcType="INTEGER" property="validFlag" />
+		<result column="is_default" jdbcType="INTEGER" property="isDefault" />
+		<result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+		<result column="created_user" jdbcType="VARCHAR" property="createdUser" />
+		<result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+		<result column="updated_user" jdbcType="VARCHAR" property="updatedUser" />
+	</resultMap>
+
+	<resultMap id="DataSourcetMap"
+		type="com.yaic.auth.thirdparty.model.DataSourceModel">
+		<id column="data_source_id" jdbcType="INTEGER" property="dataSourceId" />
+		<result column="data_source" jdbcType="VARCHAR" property="dataSource" />
+		<result column="source_name" jdbcType="VARCHAR" property="sourceName" />
+		<result column="app_id" jdbcType="VARCHAR" property="appId" />
+		<result column="auth_id" jdbcType="INTEGER" property="authId" />
+		<result column="valid_flag" jdbcType="INTEGER" property="validFlag" />
+		<result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+		<result column="created_user" jdbcType="VARCHAR" property="createdUser" />
+		<result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+		<result column="updated_user" jdbcType="VARCHAR" property="updatedUser" />
+	</resultMap>
+
+
+	<sql id="Base_Column_List">
+		project_id, project_code, project_name, account_id,
+		auth_id, data_source_id,
+		valid_flag,
+		is_default, created_date,
+		created_user, updated_date, updated_user
+	</sql>
+
+	<select id="selectOneByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_project
+		where project_id = #{projectId,jdbcType=INTEGER} AND
+		valid_flag = 1
+	</select>
+
+	<select id="selectOneByProjectCode" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_project
+		where project_code = #{projectCode,jdbcType=VARCHAR} AND
+		valid_flag = 1 
+	</select>
+
+	<select id="getDefaultProjectBySourceid" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_project
+		where data_source_id = #{dataSourceId,jdbcType=INTEGER}
+		AND
+		valid_flag = 1 and is_default = 1 
+	</select>
+
+	<update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		update t_project
+		set valid_flag = 0
+		where project_id = #{projectId,jdbcType=INTEGER}
+	</update>
+	<insert id="insert" parameterType="com.yaic.auth.thirdparty.model.ProjectModel">
+		insert into t_project
+		(project_id, project_code, project_name,
+		account_id, auth_id,
+		data_source_id,
+		valid_flag, is_default, created_date,
+		created_user,
+		updated_date, updated_user
+		)
+		values (#{projectId,jdbcType=INTEGER},
+		#{projectCode,jdbcType=VARCHAR},
+		#{projectName,jdbcType=VARCHAR},
+		#{accountId,jdbcType=INTEGER}, #{authId,jdbcType=INTEGER},
+		#{dataSourceId,jdbcType=INTEGER},
+		#{validFlag,jdbcType=CHAR},
+		#{isDefault,jdbcType=CHAR},
+		#{createdDate,jdbcType=TIMESTAMP},
+		#{createdUser,jdbcType=VARCHAR}, #{updatedDate,jdbcType=TIMESTAMP},
+		#{updatedUser,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" useGeneratedKeys="true"
+		keyProperty="projectId" parameterType="com.yaic.auth.thirdparty.model.ProjectModel">
+		insert into t_project
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="projectId != null and projectId != ''">
+				project_id,
+			</if>
+			<if test="projectCode != null and projectCode != ''">
+				project_code,
+			</if>
+			<if test="projectName != null and projectName != ''">
+				project_name,
+			</if>
+			<if test="accountId != null and accountId != ''">
+				account_id,
+			</if>
+			<if test="authId != null and authId != ''">
+				auth_id,
+			</if>
+			<if test="dataSourceId != null and dataSourceId != ''">
+				data_source_id,
+			</if>
+			<if test="validFlag != null and validFlag != ''">
+				valid_flag,
+			</if>
+			<if test="isDefault != null and isDefault != ''">
+				is_default,
+			</if>
+			<if test="createdDate != null">
+				created_date,
+			</if>
+			<if test="createdUser != null and createdUser != ''">
+				created_user,
+			</if>
+			<if test="updatedDate != null">
+				updated_date,
+			</if>
+			<if test="updatedUser != null and updatedUser != ''">
+				updated_user,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="projectId != null and projectId != ''">
+				#{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="projectCode != null and projectCode != ''">
+				#{projectCode,jdbcType=VARCHAR},
+			</if>
+			<if test="projectName != null and projectName != ''">
+				#{projectName,jdbcType=VARCHAR},
+			</if>
+			<if test="accountId != null and accountId != ''">
+				#{accountId,jdbcType=INTEGER},
+			</if>
+			<if test="authId != null and authId != ''">
+				#{authId,jdbcType=INTEGER},
+			</if>
+			<if test="dataSourceId != null and  dataSourceId != ''">
+				#{dataSourceId,jdbcType=INTEGER},
+			</if>
+			<if test="validFlag != null and validFlag != ''">
+				#{validFlag,jdbcType=CHAR},
+			</if>
+			<if test="isDefault != null and isDefault != ''">
+				#{isDefault,jdbcType=CHAR},
+			</if>
+			<if test="createdDate != null">
+				#{createdDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createdUser != null and createdUser != ''">
+				#{createdUser,jdbcType=VARCHAR},
+			</if>
+			<if test="updatedDate != null">
+				#{updatedDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatedUser != null and updatedUser != ''">
+				#{updatedUser,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.yaic.auth.thirdparty.model.ProjectModel">
+		update t_project
+		<set>
+			<if test="projectCode != null and projectCode != ''">
+				project_code = #{projectCode,jdbcType=VARCHAR},
+			</if>
+			<if test="projectName != null and projectName != ''">
+				project_name = #{projectName,jdbcType=VARCHAR},
+			</if>
+			<if test="accountId != null and accountId != ''">
+				account_id = #{accountId,jdbcType=INTEGER},
+			</if>
+			<if test="authId != null and authId != ''">
+				auth_id = #{authId,jdbcType=INTEGER},
+			</if>
+			<if test="dataSourceId != null and dataSourceId != ''">
+				data_source_id = #{dataSourceId,jdbcType=INTEGER},
+			</if>
+			<if test="validFlag != null and validFlag != ''">
+				valid_flag = #{validFlag,jdbcType=CHAR},
+			</if>
+			<if test="isDefault != null and isDefault != ''">
+				is_default = #{isDefault,jdbcType=CHAR},
+			</if>
+			<if test="createdDate != null">
+				created_date = #{createdDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createdUser != null and createdUser != ''">
+				created_user = #{createdUser,jdbcType=VARCHAR},
+			</if>
+			<if test="updatedDate != null">
+				updated_date = #{updatedDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatedUser != null and updatedUser != ''">
+				updated_user = #{updatedUser,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where project_id = #{projectId,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.yaic.auth.thirdparty.model.ProjectModel">
+		update t_project
+		set project_code = #{projectCode,jdbcType=VARCHAR},
+		project_name =
+		#{projectName,jdbcType=VARCHAR},
+		account_id =
+		#{accountId,jdbcType=INTEGER},
+		auth_id = #{authId,jdbcType=INTEGER},
+		data_source_id = #{dataSourceId,jdbcType=INTEGER},
+		valid_flag =
+		#{validFlag,jdbcType=CHAR},
+		is_default = #{isDefault,jdbcType=CHAR},
+		created_date = #{createdDate,jdbcType=TIMESTAMP},
+		created_user =
+		#{createdUser,jdbcType=VARCHAR},
+		updated_date =
+		#{updatedDate,jdbcType=TIMESTAMP},
+		updated_user =
+		#{updatedUser,jdbcType=VARCHAR}
+		where project_id =
+		#{projectId,jdbcType=INTEGER}
+	</update>
+
+	<select id="getList" parameterType="com.yaic.auth.thirdparty.model.ProjectModel"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_project
+		<trim prefix="WHERE (" suffix=")" prefixOverrides="AND">
+			<if test="projectId != null and projectId != ''">
+				AND project_id = #{projectId,jdbcType=INTEGER}
+			</if>
+			<if test="projectCode != null and projectCode != '' ">
+				AND project_code like CONCAT('%', #{projectCode}, '%')
+			</if>
+			<if test="projectName != null and projectName != '' ">
+				AND project_name like CONCAT('%', #{projectName}, '%')
+			</if>
+			<if test="accountId != null and accountId != '' ">
+				AND account_id = #{accountId,jdbcType=INTEGER}
+			</if>
+			<if test="authId != null and authId != '' ">
+				AND auth_id = #{authId,jdbcType=INTEGER}
+			</if>
+			<if test="dataSourceId != null and dataSourceId != ''">
+				AND data_source_id = #{dataSourceId,jdbcType=INTEGER}
+			</if>
+			<if test="isDefault != null">
+				AND is_default = #{isDefault,jdbcType=CHAR}
+			</if>
+			<if test="1==1">
+				AND valid_flag = 1
+			</if>
+		</trim>
+		ORDER BY created_date DESC ,project_id DESC
+	</select>
+
+	<select id="selectProjectView" parameterType="map" resultMap="ProjectViewMap">
+		select p.project_id,
+		p.project_code,
+		p.project_name,
+		p.account_id,
+		d.source_name,
+		p.auth_id,
+		p.valid_flag,
+		p.created_date,
+		p.created_user,
+		p.updated_date,
+		p.updated_user,(CASE when
+		p.is_default ='1' THEN '是'
+		ELSE '否' END) AS is_default FROM t_project
+		p,t_data_source d WHERE
+		p.valid_flag = '1'
+		AND d.valid_flag = '1' AND
+		d.data_source_id =
+		p.data_source_id
+		<if test="projectCode != null and projectCode != '' ">
+			AND p.project_code like CONCAT('%', #{projectCode}, '%')
+		</if>
+		<if test="projectName != null and projectName != '' ">
+			AND p.project_name like CONCAT('%', #{projectName}, '%')
+		</if>
+		<if test="sourceName != null and sourceName != ''">
+			AND d.source_name like
+			CONCAT('%',#{sourceName,jdbcType=VARCHAR},'%')
+		</if>
+		<if test="isDefault != null and isDefault != ''">
+			AND p.is_default = #{isDefault,jdbcType=INTEGER}
+		</if>
+		ORDER BY created_date DESC ,project_id DESC
+	</select>
+
+
+</mapper>

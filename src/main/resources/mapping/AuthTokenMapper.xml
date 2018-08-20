@@ -1,0 +1,268 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yaic.auth.thirdparty.dao.AuthTokenDao">
+	<resultMap id="BaseResultMap" type="com.yaic.auth.thirdparty.model.AuthTokenModel">
+		<id column="token_id" jdbcType="INTEGER" property="tokenId" />
+		<result column="app_id" jdbcType="VARCHAR" property="appId" />
+		<result column="app_secret" jdbcType="VARCHAR" property="appSecret" />
+		<result column="open_id" jdbcType="VARCHAR" property="openId" />
+		<result column="access_token" jdbcType="VARCHAR" property="accessToken" />
+		<result column="refresh_token" jdbcType="VARCHAR" property="refreshToken" />
+		<result column="expiretime" jdbcType="TIMESTAMP" property="expiretime" />
+		<result column="ref_expire_time" jdbcType="TIMESTAMP" property="refExpireTime" />
+		<result column="valid_flag" jdbcType="INTEGER" property="validFlag" />
+		<result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+		<result column="created_user" jdbcType="VARCHAR" property="createdUser" />
+		<result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+		<result column="updated_user" jdbcType="VARCHAR" property="updatedUser" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		token_id,
+		app_id,
+		app_secret,
+		open_id,
+		access_token,
+		refresh_token,
+		expiretime,
+		ref_expire_time,
+		valid_flag,
+		created_date,
+		created_user,
+		updated_date,
+		updated_user
+	</sql>
+	<insert id="insert" parameterType="com.yaic.auth.thirdparty.model.AuthTokenModel">
+		insert into
+		t_auth_common_token (token_id,app_id, app_secret, open_id,
+		access_token,
+		refresh_token, expiretime,
+		ref_expire_time, valid_flag,
+		created_date,
+		created_user, updated_date, updated_user
+		)
+		values
+		(#{tokenId,jdbcType=INTEGER},#{appId,jdbcType=VARCHAR},
+		#{appSecret,jdbcType=VARCHAR},
+		#{openId,jdbcType=VARCHAR},
+		#{accessToken,jdbcType=VARCHAR},
+		#{refreshToken,jdbcType=VARCHAR},
+		#{expiretime,jdbcType=TIMESTAMP},
+		#{refExpireTime,jdbcType=TIMESTAMP},
+		#{validFlag,jdbcType=CHAR},
+		#{createdDate,jdbcType=TIMESTAMP},
+		#{createdUser,jdbcType=VARCHAR},
+		#{updatedDate,jdbcType=TIMESTAMP},
+		#{updatedUser,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" useGeneratedKeys="true" keyProperty="tokenId" parameterType="com.yaic.auth.thirdparty.model.AuthTokenModel">
+		insert into t_auth_common_token
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="tokenId != null and tokenId != ''">
+				token_id,
+			</if>
+			<if test="appId != null and appId != ''">
+				app_id,
+			</if>
+			<if test="appSecret != null and appSecret != ''">
+				app_secret,
+			</if>
+			<if test="openId != null and openId != ''">
+				open_id,
+			</if>
+			<if test="accessToken != null and accessToken != ''">
+				access_token,
+			</if>
+			<if test="refreshToken != null and refreshToken != ''">
+				refresh_token,
+			</if>
+			<if test="expiretime != null">
+				expiretime,
+			</if>
+			<if test="refExpireTime != null">
+				ref_expire_time,
+			</if>
+			<if test="validFlag != null and validFlag != ''">
+				valid_flag,
+			</if>
+			<if test="createdDate != null">
+				created_date,
+			</if>
+			<if test="createdUser != null and createdUser != ''">
+				created_user,
+			</if>
+			<if test="updatedDate != null">
+				updated_date,
+			</if>
+			<if test="updatedUser != null and updatedUser != ''">
+				updated_user,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="tokenId != null and tokenId != ''">
+				#{tokenId,jdbcType=INTEGER},
+			</if>
+			<if test="appId != null and appId != ''">
+				#{appId,jdbcType=VARCHAR},
+			</if>
+			<if test="appSecret != null and appSecret != ''">
+				#{appSecret,jdbcType=VARCHAR},
+			</if>
+			<if test="openId != null and openId != ''">
+				#{openId,jdbcType=VARCHAR},
+			</if>
+			<if test="accessToken != null and accessToken != ''">
+				#{accessToken,jdbcType=VARCHAR},
+			</if>
+			<if test="refreshToken != null and refreshToken != ''">
+				#{refreshToken,jdbcType=VARCHAR},
+			</if>
+			<if test="expiretime != null">
+				#{expiretime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="refExpireTime != null">
+				#{refExpireTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="validFlag != null and validFlag != ''">
+				#{validFlag,jdbcType=CHAR},
+			</if>
+			<if test="createdDate != null">
+				#{createdDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createdUser != null and createdUser != ''">
+				#{createdUser,jdbcType=VARCHAR},
+			</if>
+			<if test="updatedDate != null">
+				#{updatedDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatedUser != null and updatedUser != ''">
+				#{updatedUser,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+	<select id="selectByConditions" parameterType="com.yaic.auth.thirdparty.model.AuthTokenModel"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_auth_common_token
+		<trim prefix="WHERE (" suffix=")" prefixOverrides="AND">
+			<if test="tokenId != null and tokenId != ''">
+				AND token_id = #{tokenId,jdbcType=INTEGER}
+			</if>
+			<if test="appId != null and appId != ''">
+				AND app_id like CONCAT('%', #{appId}, '%')
+			</if>
+			<if test="appSecret != null and appSecret != ''">
+				AND app_secret like CONCAT('%', #{appSecret}, '%')
+			</if>
+			<if test="openId != null and openId != ''">
+				AND open_id like CONCAT('%', #{openId}, '%')
+			</if>
+			<if test="accessToken != null and accessToken != ''">
+				AND access_token like CONCAT('%', #{accessToken}, '%')
+			</if>
+			<if test="refreshToken != null and refreshToken != ''">
+				AND refresh_token  like CONCAT('%', #{refreshToken}, '%')
+			</if>
+			<if test="expiretime != null">
+				AND expiretime = #{expiretime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="refExpireTime != null">
+				AND ref_expire_time = #{refExpireTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="1==1">
+				AND valid_flag = 1
+			</if>
+			<if test="createdDate != null">
+				AND created_date = #{createdDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createdUser != null and createdUser != ''">
+				AND created_user = #{createdUser,jdbcType=VARCHAR}
+			</if>
+			<if test="updatedDate != null">
+				AND updated_date = #{updatedDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updatedUser != null and updatedUser != ''">
+				AND updated_user = #{updatedUser,jdbcType=VARCHAR}
+			</if>
+		</trim>
+		ORDER BY created_date DESC ,token_id DESC
+	</select>
+
+	<update id="updateByAppIdSelective" parameterType="com.yaic.auth.thirdparty.model.AuthTokenModel">
+		update t_auth_common_token
+		<set>
+			<if test="tokenId != null and tokenId != ''">
+				token_id = #{tokenId,jdbcType=INTEGER},
+			</if>
+			<if test="appId != null and appId != ''">
+				app_id = #{appId,jdbcType=VARCHAR},
+			</if>
+			<if test="appSecret != null and appSecret != ''">
+				app_secret = #{appSecret,jdbcType=VARCHAR},
+			</if>
+			<if test="openId != null and openId != ''">
+				open_id = #{openId,jdbcType=VARCHAR},
+			</if>
+			<if test="accessToken != null and accessToken != ''">
+				access_token = #{accessToken,jdbcType=VARCHAR},
+			</if>
+			<if test="refreshToken != null and refreshToken != ''">
+				refresh_token = #{refreshToken,jdbcType=VARCHAR},
+			</if>
+			<if test="expiretime != null">
+				expiretime = #{expiretime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="refExpireTime != null">
+				ref_expire_time = #{refExpireTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="validFlag != null and validFlag != ''">
+				valid_flag = #{validFlag,jdbcType=CHAR},
+			</if>
+			<if test="createdDate != null">
+				created_date = #{createdDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createdUser != null and createdUser != ''">
+				created_user = #{createdUser,jdbcType=VARCHAR},
+			</if>
+			<if test="updatedDate != null">
+				updated_date = #{updatedDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatedUser != null and updatedUser != ''">
+				updated_user = #{updatedUser,jdbcType=VARCHAR}
+			</if>
+		</set>
+		where token_id = #{tokenId,jdbcType=INTEGER}
+	</update>
+
+	<select id="selectOneByAppIdAndAppSecret" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_auth_common_token where app_id = #{appId,jdbcType=VARCHAR} AND
+		app_secret = #{appSecret,jdbcType=VARCHAR} AND valid_flag = 1
+	</select>
+
+	<update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		update
+		t_auth_common_token
+		set valid_flag = 0
+		where
+		token_id =
+		#{tokenId,jdbcType=INTEGER} AND valid_flag = 1
+	</update>
+
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_auth_common_token
+		where
+		token_id =
+		#{tokenId,jdbcType=INTEGER} AND
+		valid_flag = 1
+	</select>
+
+
+</mapper>

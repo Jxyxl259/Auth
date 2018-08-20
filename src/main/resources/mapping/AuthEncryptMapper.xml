@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yaic.auth.thirdparty.dao.AuthEncryptDao">
+	<resultMap id="BaseResultMap" type="com.yaic.auth.thirdparty.model.AuthEncryptModel">
+		<id column="auth_id" jdbcType="INTEGER" property="authId" />
+		<result column="auth_type" jdbcType="VARCHAR" property="authType" />
+		<result column="auth_param1" jdbcType="VARCHAR" property="authParam1" />
+		<result column="auth_param2" jdbcType="VARCHAR" property="authParam2" />
+		<result column="encrypt_type" jdbcType="VARCHAR" property="encryptType" />
+		<result column="encrypt_param1" jdbcType="VARCHAR" property="encryptParam1" />
+		<result column="encrypt_param2" jdbcType="VARCHAR" property="encryptParam2" />
+		<result column="valid_flag" jdbcType="INTEGER" property="validFlag" />
+		<result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+		<result column="created_user" jdbcType="VARCHAR" property="createdUser" />
+		<result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+		<result column="updated_user" jdbcType="VARCHAR" property="updatedUser" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		auth_id, auth_type, auth_param1, auth_param2, encrypt_type,
+		encrypt_param1,
+		encrypt_param2,
+		valid_flag, created_date, created_user,
+		updated_date, updated_user
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_auth_encrypt
+		where auth_id = #{authId,jdbcType=INTEGER} AND
+		valid_flag = 1
+	</select>
+	<update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		update
+		t_auth_encrypt set valid_flag = 0
+		where auth_id =
+		#{authId,jdbcType=INTEGER} AND valid_flag = 1
+	</update>
+	<insert id="insert" parameterType="com.yaic.auth.thirdparty.model.AuthEncryptModel">
+		insert into t_auth_encrypt
+		(auth_id, auth_type, auth_param1,
+		auth_param2, encrypt_type,
+		encrypt_param1,
+		encrypt_param2, valid_flag, created_date,
+		created_user,
+		updated_date, updated_user
+		)
+		values (#{authId,jdbcType=INTEGER},
+		#{authType,jdbcType=VARCHAR},
+		#{authParam1,jdbcType=VARCHAR},
+		#{authParam2,jdbcType=VARCHAR}, #{encryptType,jdbcType=VARCHAR},
+		#{encryptParam1,jdbcType=VARCHAR},
+		#{encryptParam2,jdbcType=VARCHAR},
+		#{validFlag,jdbcType=CHAR},
+		#{createdDate,jdbcType=TIMESTAMP},
+		#{createdUser,jdbcType=VARCHAR}, #{updatedDate,jdbcType=TIMESTAMP},
+		#{updatedUser,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective"  useGeneratedKeys="true" keyProperty="authId" parameterType="com.yaic.auth.thirdparty.model.AuthEncryptModel">
+		insert into t_auth_encrypt
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="authId != null and authId != ''">
+				auth_id,
+			</if>
+			<if test="authType != null and authType != ''">
+				auth_type,
+			</if>
+			<if test="authParam1 != null and authParam1 != ''">
+				auth_param1,
+			</if>
+			<if test="authParam2 != null and authParam2 != ''">
+				auth_param2,
+			</if>
+			<if test="encryptType != null and encryptType != ''">
+				encrypt_type,
+			</if>
+			<if test="encryptParam1 != null and encryptParam1 != ''">
+				encrypt_param1,
+			</if>
+			<if test="encryptParam2 != null and encryptParam2 != ''">
+				encrypt_param2,
+			</if>
+			<if test="validFlag != null and validFlag != ''">
+				valid_flag,
+			</if>
+			<if test="createdDate != null">
+				created_date,
+			</if>
+			<if test="createdUser != null and createdUser != ''">
+				created_user,
+			</if>
+			<if test="updatedDate != null">
+				updated_date,
+			</if>
+			<if test="updatedUser != null and updatedUser != ''">
+				updated_user,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="authId != null and authId != ''">
+				#{authId,jdbcType=INTEGER},
+			</if>
+			<if test="authType != null and authType != ''">
+				#{authType,jdbcType=VARCHAR},
+			</if>
+			<if test="authParam1 != null and authParam1 != ''">
+				#{authParam1,jdbcType=VARCHAR},
+			</if>
+			<if test="authParam2 != null and authParam2 != ''">
+				#{authParam2,jdbcType=VARCHAR},
+			</if>
+			<if test="encryptType != null and encryptType != ''">
+				#{encryptType,jdbcType=VARCHAR},
+			</if>
+			<if test="encryptParam1 != null and encryptParam1 != ''">
+				#{encryptParam1,jdbcType=VARCHAR},
+			</if>
+			<if test="encryptParam2 != null and encryptParam2 != ''">
+				#{encryptParam2,jdbcType=VARCHAR},
+			</if>
+			<if test="validFlag != null and validFlag != ''">
+				#{validFlag,jdbcType=CHAR},
+			</if>
+			<if test="createdDate != null">
+				#{createdDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createdUser != null and createdUser != ''">
+				#{createdUser,jdbcType=VARCHAR},
+			</if>
+			<if test="updatedDate != null">
+				#{updatedDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatedUser != null and updatedUser != ''">
+				#{updatedUser,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.yaic.auth.thirdparty.model.AuthEncryptModel">
+		update t_auth_encrypt
+		<set>
+			<if test="authType != null">
+				auth_type = #{authType,jdbcType=VARCHAR},
+			</if>
+			<if test="authParam1 != null">
+				auth_param1 = #{authParam1,jdbcType=VARCHAR},
+			</if>
+			<if test="authParam2 != null">
+				auth_param2 = #{authParam2,jdbcType=VARCHAR},
+			</if>
+			<if test="encryptType != null">
+				encrypt_type = #{encryptType,jdbcType=VARCHAR},
+			</if>
+			<if test="encryptParam1 != null">
+				encrypt_param1 = #{encryptParam1,jdbcType=VARCHAR},
+			</if>
+			<if test="encryptParam2 != null">
+				encrypt_param2 = #{encryptParam2,jdbcType=VARCHAR},
+			</if>
+			<if test="validFlag != null and validFlag != ''">
+				valid_flag = #{validFlag,jdbcType=CHAR},
+			</if>
+			<if test="createdDate != null">
+				created_date = #{createdDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createdUser != null">
+				created_user = #{createdUser,jdbcType=VARCHAR},
+			</if>
+			<if test="updatedDate != null">
+				updated_date = #{updatedDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatedUser != null">
+				updated_user = #{updatedUser,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where auth_id = #{authId,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.yaic.auth.thirdparty.model.AuthEncryptModel">
+		update
+		t_auth_encrypt
+		set auth_type = #{authType,jdbcType=VARCHAR},
+		auth_param1 = #{authParam1,jdbcType=VARCHAR},
+		auth_param2 =
+		#{authParam2,jdbcType=VARCHAR},
+		encrypt_type =
+		#{encryptType,jdbcType=VARCHAR},
+		encrypt_param1 =
+		#{encryptParam1,jdbcType=VARCHAR},
+		encrypt_param2 =
+		#{encryptParam2,jdbcType=VARCHAR},
+		valid_flag =
+		#{validFlag,jdbcType=CHAR},
+		created_date =
+		#{createdDate,jdbcType=TIMESTAMP},
+		created_user =
+		#{createdUser,jdbcType=VARCHAR},
+		updated_date =
+		#{updatedDate,jdbcType=TIMESTAMP},
+		updated_user =
+		#{updatedUser,jdbcType=VARCHAR}
+		where auth_id =
+		#{authId,jdbcType=INTEGER}
+	</update>
+
+	<select id="selectByConditions" parameterType="com.yaic.auth.thirdparty.model.AuthEncryptModel"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_auth_encrypt
+		<trim prefix="WHERE (" suffix=")" prefixOverrides="AND">
+			<if test="authId != null and authId != ''">
+				AND auth_id = #{authId,jdbcType=INTEGER}
+			</if>
+			<if test="authType != null and authType != ''">
+				AND auth_type = #{authType,jdbcType=VARCHAR}
+			</if>
+			<if test="authParam1 != null and authParam1 != ''">
+				AND auth_param1 = #{authParam1,jdbcType=VARCHAR}
+			</if>
+			<if test="authParam2 != null and authParam2 != ''">
+				AND auth_param2 = #{authParam2,jdbcType=VARCHAR}
+			</if>
+			<if test="encryptType != null and encryptType != ''">
+				AND encrypt_type = #{encryptType,jdbcType=VARCHAR}
+			</if>
+			<if test="encryptParam1 != null and encryptParam1 != ''">
+				AND encrypt_param1 = #{encryptParam1,jdbcType=VARCHAR}
+			</if>
+			<if test="encryptParam2 != null and encryptParam2 != ''">
+				AND encrypt_param2 = #{encryptParam2,jdbcType=VARCHAR}
+			</if>
+			<if test="appId != null and appId != ''">
+				AND app_id = #{appId,jdbcType=VARCHAR}
+			</if>
+			<if test="1 == 1">
+				AND valid_flag = 1
+			</if>
+			<if test="createdDate != null">
+				AND created_date = #{createdDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createdUser != null and createdUser != ''">
+				AND created_user = #{createdUser,jdbcType=VARCHAR}
+			</if>
+			<if test="updatedDate != null">
+				AND updated_date = #{updatedDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updatedUser != null and updatedUser != ''">
+				AND updated_user = #{updatedUser,jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</select>
+	
+	<select id="selectListsByAppid" resultMap="BaseResultMap" parameterType="java.lang.String">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_auth_encrypt t 
+		WHERE t.auth_id IN
+		(
+			SELECT t1.auth_id
+			FROM t_project t1
+			WHERE t1.auth_id = t.auth_id 
+			AND t1.data_source_id IN
+			(
+				SELECT t2.data_source_id
+				FROM t_data_source t2
+				WHERE t2.app_id = #{appId,jdbcType=VARCHAR} 
+				AND t2.valid_flag = 1
+			) AND t1.valid_flag = 1
+		) AND t.valid_flag = 1;
+	</select>
+	
+</mapper>

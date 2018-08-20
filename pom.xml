@@ -1,0 +1,195 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.yaic</groupId>
+	<artifactId>auth</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>auth</name>
+	<description>auth project</description>
+	
+	<parent>  
+		<groupId>org.springframework.boot</groupId>  
+		<artifactId>spring-boot-starter-parent</artifactId>  
+		<version>1.5.14.RELEASE</version>
+	</parent> 
+
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+	</properties>
+	
+	<distributionManagement>
+		<repository>
+			<id>Releases</id>
+			<name>nexus-Releases</name>
+            <url>http://192.168.144.155:8080/repository/maven-releases/</url>
+		</repository>
+		<snapshotRepository>
+			<id>Snapshots</id>
+			<name>nexus-Snapshots</name>
+            <url>http://192.168.144.155:8080/repository/maven-snapshots/</url>
+		</snapshotRepository>
+	</distributionManagement>
+	
+	<profiles>  
+		<profile>  
+			<id>dev</id>  
+			<activation>  
+				<activeByDefault>true</activeByDefault>  
+			</activation> 
+			<properties>  
+				<profileActive>dev</profileActive>  
+			</properties>  			
+		</profile>  
+		<profile>  
+			<id>sit</id>  
+			<properties>  
+				<profileActive>sit</profileActive>  
+			</properties>  
+		</profile>  
+		<profile>  
+			<id>uat</id>  
+			<properties>  
+				<profileActive>uat</profileActive>  
+			</properties>  
+		</profile> 
+		<profile>  
+			<id>prod</id>  
+			<properties>  
+				<profileActive>prod</profileActive>  
+			</properties>  
+		</profile>  
+	</profiles>
+		
+	<dependencies>  
+		<dependency>  
+			<groupId>org.springframework.boot</groupId>  
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>  
+		<dependency>  
+			<groupId>org.springframework.boot</groupId>  
+			<artifactId>spring-boot-starter</artifactId>
+		</dependency>
+		
+		<!-- JDBC begin -->
+		<dependency>  
+			<groupId>mysql</groupId>  
+			<artifactId>mysql-connector-java</artifactId>  
+		</dependency> 
+		<!-- JDBC end -->
+		
+		<!-- fastJson begin -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.45</version>
+		</dependency>
+		<!-- fastJson end -->
+
+		<!-- 引入mybatis begin -->  
+		<dependency>  
+			<groupId>org.mybatis.spring.boot</groupId>  
+			<artifactId>mybatis-spring-boot-starter</artifactId>  
+			<version>1.3.0</version>  
+		</dependency>  
+		<!-- mybatis分页插件 -->  
+		<dependency>  
+			<groupId>com.github.pagehelper</groupId>  
+			<artifactId>pagehelper-spring-boot-starter</artifactId>  
+			<version>1.2.2</version>  
+		</dependency> 
+		<!-- 引入mybatis end -->  
+
+		<!--  druid  begin -->
+		<dependency>  
+			<groupId>com.alibaba</groupId>  
+			<artifactId>druid-spring-boot-starter</artifactId>  
+			<version>1.1.10</version>
+		</dependency>
+		<!--  druid  end -->
+	
+		<!-- test -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		<!-- shiro begin -->
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-spring</artifactId>
+			<version>1.2.2</version>
+		</dependency>
+		<!-- shiro end -->
+
+		<!-- commons begin -->
+		<dependency>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.6</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.6</version>
+		</dependency>
+		<!-- commons end -->
+		
+		<!-- httpclient 配置开始 -->
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+		</dependency>
+		<!-- httpclient 配置结束 -->  
+		
+		<!-- jodatime 配置开始 -->
+		<dependency>
+			<groupId>joda-time</groupId>
+			<artifactId>joda-time</artifactId>
+		</dependency>
+		<!-- jodatime 配置结束 -->
+		
+		<dependency>
+			<groupId>net.sf.json-lib</groupId>
+			<artifactId>json-lib</artifactId>
+			<version>2.4</version>
+			<classifier>jdk15</classifier>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-fileupload</groupId>
+			<artifactId>commons-fileupload</artifactId>
+			<version>1.3.1</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>bouncycastle</groupId>
+			<artifactId>bcprov-jdk16</artifactId>
+			<version>140</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.yaic</groupId>
+			<artifactId>platform</artifactId>
+			<version>1.0.1-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
+		</dependency>
+		
+	</dependencies> 
+	
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
+</project>

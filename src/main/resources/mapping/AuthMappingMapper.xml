@@ -1,0 +1,436 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yaic.auth.thirdparty.dao.AuthMappingDao">
+	<resultMap id="BaseResultMap"
+		type="com.yaic.auth.thirdparty.model.AuthMappingModel">
+		<id column="mapping_id" jdbcType="INTEGER" property="mappingId" />
+		<result column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="request_type" jdbcType="VARCHAR" property="requestType" />
+		<result column="request_url" jdbcType="VARCHAR" property="requestUrl" />
+		<result column="server_id" jdbcType="INTEGER" property="serverId" />
+		<result column="auth_id" jdbcType="INTEGER" property="authId" />
+		<result column="valid_flag" jdbcType="INTEGER" property="validFlag" />
+		<result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+		<result column="created_user" jdbcType="VARCHAR" property="createdUser" />
+		<result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+		<result column="updated_user" jdbcType="VARCHAR" property="updatedUser" />
+	</resultMap>
+
+	<resultMap id="ProjectMap" type="com.yaic.auth.thirdparty.model.ProjectModel">
+		<id column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="project_code" jdbcType="VARCHAR" property="projectCode" />
+		<result column="project_name" jdbcType="VARCHAR" property="projectName" />
+		<result column="account_id" jdbcType="INTEGER" property="accountId" />
+		<result column="auth_id" jdbcType="INTEGER" property="authId" />
+		<result column="data_source_id" jdbcType="INTEGER" property="dataSourceId" />
+		<result column="valid_flag" jdbcType="INTEGER" property="validFlag" />
+		<result column="is_default" jdbcType="INTEGER" property="isDefault" />
+		<result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+		<result column="created_user" jdbcType="VARCHAR" property="createdUser" />
+		<result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+		<result column="updated_user" jdbcType="VARCHAR" property="updatedUser" />
+	</resultMap>
+
+	<resultMap id="DataSourceMap"
+		type="com.yaic.auth.thirdparty.model.DataSourceModel">
+		<id column="data_source_id" jdbcType="INTEGER" property="dataSourceId" />
+		<result column="data_source" jdbcType="VARCHAR" property="dataSource" />
+		<result column="source_name" jdbcType="VARCHAR" property="sourceName" />
+		<result column="app_id" jdbcType="VARCHAR" property="appId" />
+		<result column="auth_id" jdbcType="INTEGER" property="authId" />
+		<result column="valid_flag" jdbcType="INTEGER" property="validFlag" />
+		<result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+		<result column="created_user" jdbcType="VARCHAR" property="createdUser" />
+		<result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+		<result column="updated_user" jdbcType="VARCHAR" property="updatedUser" />
+	</resultMap>
+	
+	<resultMap id="customMap1" type="com.yaic.auth.thirdparty.dto.InterfaceInfoDto">
+		<result column="data_source" jdbcType="VARCHAR" property="dataSourceCode" />
+		<result column="project_code" jdbcType="VARCHAR" property="projectCode" />
+		<result column="request_url" jdbcType="VARCHAR" property="requestUrl" />
+		<!-- <result column="project_id" jdbcType="INTEGER" property="projectId" />
+		<result column="mapping_id" jdbcType="INTEGER" property="mappingId" />
+		<result column="data_source_id" jdbcType="INTEGER" property="dataSourceId" /> -->
+	</resultMap>
+	
+	<resultMap id="customMap2" type="com.yaic.auth.thirdparty.dto.AuthMappingDto">
+		<result column="request_type" jdbcType="VARCHAR" property="requestType" />
+		<result column="mapping_id" jdbcType="INTEGER" property="mappingId" />
+		<result column="request_url" jdbcType="VARCHAR" property="requestUrl" />
+		<result column="server_type" jdbcType="VARCHAR" property="serverType" />
+		<result column="server_version" jdbcType="VARCHAR" property="serverVersion" />
+		<result column="server_env" jdbcType="VARCHAR" property="serverEnv" />
+		<result column="server_status" jdbcType="VARCHAR" property="serverStatus" />
+		<result column="system_name" jdbcType="VARCHAR" property="systemName" />
+		<result column="server_url" jdbcType="VARCHAR" property="serverUrl" />
+		<result column="server_id" jdbcType="INTEGER" property="serverId" />
+	</resultMap>
+	
+	<sql id="Base_Column_List">
+		mapping_id, project_id, request_type, request_url,
+		server_id, auth_id, valid_flag,
+		created_date,
+		created_user, updated_date,
+		updated_user
+	</sql>
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_auth_mapping
+		where mapping_id = #{mappingId,jdbcType=INTEGER}
+		AND valid_flag = 1
+	</select>
+	<update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		update
+		t_auth_mapping set valid_flag = 0 where mapping_id =
+		#{mappingId,jdbcType=INTEGER} AND valid_flag =1
+	</update>
+
+	<update id="deleteByProjectId" parameterType="java.lang.Integer">
+		update
+		t_auth_mapping set valid_flag = 0 where project_id =
+		#{projectId,jdbcType=INTEGER} AND valid_flag =1
+	</update>
+
+	<update id="deleteByServerId" parameterType="java.lang.Integer">
+		update
+		t_auth_mapping set valid_flag = 0 where server_id =
+		#{serverId,jdbcType=INTEGER} AND valid_flag =1
+	</update>
+	<insert id="insert" parameterType="com.yaic.auth.thirdparty.model.AuthMappingModel">
+		insert into t_auth_mapping
+		(mapping_id, project_id, request_type,
+		request_url, server_id,
+		valid_flag,
+		created_date, created_user, updated_date,
+		updated_user)
+		values (#{mappingId,jdbcType=INTEGER}, #{projectId,jdbcType=INTEGER},
+		#{requestType,jdbcType=VARCHAR},
+		#{requestUrl,jdbcType=VARCHAR},
+		#{serverId,jdbcType=INTEGER}, #{validFlag,jdbcType=CHAR},
+		#{createdDate,jdbcType=TIMESTAMP}, #{createdUser,jdbcType=VARCHAR},
+		#{updatedDate,jdbcType=TIMESTAMP},
+		#{updatedUser,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" useGeneratedKeys="true" keyProperty="mappingId" parameterType="com.yaic.auth.thirdparty.model.AuthMappingModel">
+		insert into t_auth_mapping
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="mappingId != null and mappingId != ''">
+				mapping_id,
+			</if>
+			<if test="projectId != null and projectId != ''">
+				project_id,
+			</if>
+			<if test="requestType != null and requestType != ''">
+				request_type,
+			</if>
+			<if test="requestUrl != null and requestUrl != ''">
+				request_url,
+			</if>
+			<if test="serverId != null and serverId != ''">
+				server_id,
+			</if>
+			<if test="validFlag != null and validFlag != ''">
+				valid_flag,
+			</if>
+			<if test="createdDate != null">
+				created_date,
+			</if>
+			<if test="createdUser != null and createdUser != ''">
+				created_user,
+			</if>
+			<if test="updatedDate != null">
+				updated_date,
+			</if>
+			<if test="updatedUser != null and updatedUser != ''">
+				updated_user,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="mappingId != null and mappingId != ''">
+				#{mappingId,jdbcType=INTEGER},
+			</if>
+			<if test="projectId != null and projectId != ''">
+				#{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="requestType != null and requestType != ''">
+				#{requestType,jdbcType=VARCHAR},
+			</if>
+			<if test="requestUrl != null and requestUrl != ''">
+				#{requestUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="serverId != null and serverId != ''">
+				#{serverId,jdbcType=INTEGER},
+			</if>
+			<if test="validFlag != null and validFlag != ''">
+				#{validFlag,jdbcType=CHAR},
+			</if>
+			<if test="createdDate != null">
+				#{createdDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createdUser != null and createdUser != ''">
+				#{createdUser,jdbcType=VARCHAR},
+			</if>
+			<if test="updatedDate != null">
+				#{updatedDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatedUser != null and updatedUser != ''">
+				#{updatedUser,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.yaic.auth.thirdparty.model.AuthMappingModel">
+		update t_auth_mapping
+		<set>
+			<if test="projectId != null and projectId != ''">
+				project_id = #{projectId,jdbcType=INTEGER},
+			</if>
+			<if test="requestType != null and requestType != ''">
+				request_type = #{requestType,jdbcType=VARCHAR},
+			</if>
+			<if test="requestUrl != null and requestUrl != ''">
+				request_url = #{requestUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="serverId != null and serverId != ''">
+				server_id = #{serverId,jdbcType=INTEGER},
+			</if>
+			<if test="validFlag != null and validFlag != ''">
+				valid_flag = #{validFlag,jdbcType=CHAR},
+			</if>
+			<if test="createdDate != null">
+				created_date = #{createdDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createdUser != null and createdUser != ''">
+				created_user = #{createdUser,jdbcType=VARCHAR},
+			</if>
+			<if test="updatedDate != null">
+				updated_date = #{updatedDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatedUser != null and updatedUser != ''">
+				updated_user = #{updatedUser,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where mapping_id = #{mappingId,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.yaic.auth.thirdparty.model.AuthMappingModel">
+		update
+		t_auth_mapping
+		set project_id = #{projectId,jdbcType=INTEGER},
+		request_type = #{requestType,jdbcType=VARCHAR},
+		request_url =
+		#{requestUrl,jdbcType=VARCHAR},
+		server_id =
+		#{serverId,jdbcType=INTEGER},
+		valid_flag = #{validFlag,jdbcType=CHAR},
+		created_date = #{createdDate,jdbcType=TIMESTAMP},
+		created_user =
+		#{createdUser,jdbcType=VARCHAR},
+		updated_date =
+		#{updatedDate,jdbcType=TIMESTAMP},
+		updated_user =
+		#{updatedUser,jdbcType=VARCHAR}
+		where mapping_id =
+		#{mappingId,jdbcType=INTEGER}
+	</update>
+	<select id="selectByConditions" parameterType="com.yaic.auth.thirdparty.model.AuthMappingModel"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_auth_mapping
+		<trim prefix="WHERE (" suffix=")" prefixOverrides="AND">
+			<if test="mappingId !=null">
+				AND mapping_id = #{mappingId,jdbcType=INTEGER}
+			</if>
+			<if test="projectId != null and projectId != ''">
+				AND project_id = #{projectId,jdbcType=INTEGER}
+			</if>
+			<if test="requestType != null and requestType != ''">
+				AND request_type = #{requestType,jdbcType=VARCHAR}
+			</if>
+			<if test="requestUrl != null and requestUrl != ''">
+				AND request_url = #{requestUrl,jdbcType=VARCHAR}
+			</if>
+			<if test="serverId != null and serverId != ''">
+				AND server_id = #{serverId,jdbcType=INTEGER}
+			</if>
+			<if test="1 == 1">
+				AND valid_flag = 1
+			</if>
+			<if test="createdDate != null">
+				AND created_date = #{createdDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createdUser != null and createdUser != ''">
+				AND created_user = #{createdUser,jdbcType=VARCHAR}
+			</if>
+			<if test="updatedDate != null">
+				AND updated_date = #{updatedDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updatedUser != null and updatedUser != ''">
+				AND updated_user = #{updatedUser,jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</select>
+
+	<select id="selectByProjectId" parameterType="java.lang.Integer"
+		resultType="java.lang.Integer">
+		select count(mapping_id) from t_auth_mapping where
+		project_id = #{projectId,jdbcType=INTEGER} AND valid_flag = 1
+	</select>
+
+	<select id="selectOneByAppIdAndReqUrl" resultMap="BaseResultMap">
+		SELECT
+		<include refid="Base_Column_List" />
+		FROM t_auth_mapping t
+		WHERE t.request_url =
+		#{requestUrl,jdbcType=VARCHAR}
+		AND
+		t.project_id IN(SELECT t1.project_id
+		FROM t_project t1
+		WHERE
+		t1.data_source_id
+		IN(SELECT t2.data_source_id
+		FROM t_data_source t2
+		WHERE t2.app_id =
+		#{appId,jdbcType=VARCHAR} AND t2.valid_flag = 1) AND t1.valid_flag =
+		1) AND t.valid_flag = 1;
+	</select>
+	
+	<select id="selectListsByAppid" resultMap="customMap1" parameterType="java.lang.String">
+		SELECT
+		t.request_url,t3.project_code,t4.data_source 
+<!-- 		t.mapping_id,t.project_id,t.request_url,t3.project_code,t4.data_source,t4.data_source_id  -->
+		FROM t_auth_mapping t,t_project t3,t_data_source t4 
+		WHERE t.project_id = t3.project_id
+		AND t4.valid_flag = 1 AND t3.data_source_id = t4.data_source_id 
+		AND t.project_id IN
+		(
+			SELECT t1.project_id
+			FROM t_project t1
+			WHERE t1.valid_flag = 1
+			AND t1.is_default = 1
+			AND t1.data_source_id IN
+			(
+				SELECT t2.data_source_id
+				FROM t_data_source t2
+				WHERE t2.app_id = #{appId,jdbcType=VARCHAR} 
+				AND t2.valid_flag = 1
+			) AND t1.valid_flag =
+			1
+		) AND t.valid_flag = 1
+		ORDER BY t4.data_source_id,t3.project_id,t.mapping_id;
+	</select>
+	
+	<select id="selectOneByProjectIdAndServerId" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_auth_mapping
+		where
+		project_id = #{projectId,jdbcType=INTEGER}
+		AND
+		server_id =
+		#{serverId,jdbcType=INTEGER}
+		AND
+		valid_flag = 1
+	</select>
+
+	<select id="selectOneByRequestTypeAndRequestUrl" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_auth_mapping
+		where
+		request_type =
+		#{requestType,jdbcType=VARCHAR}
+		AND
+		request_url =
+		#{requestUrl,jdbcType=VARCHAR}
+		AND
+		valid_flag = 1
+	</select>
+	
+	<select id="getMappAndServerByProId" resultMap="customMap2" parameterType="java.lang.Integer">
+		SELECT
+		  t.request_type,
+		  t.mapping_id,
+		  t.request_url,
+		  t1.server_env,
+		  t1.server_type,
+		  t1.server_url,
+		  t1.server_env,
+		  t1.system_name,
+		  t1.server_id,
+		  t1.server_status
+		FROM t_auth_mapping t,
+		  t_server t1
+		WHERE t.server_id = t1.server_id
+		    AND t.valid_flag = 1
+		    AND t1.valid_flag = 1
+		    AND project_id = #{projectId,jdbcType=INTEGER};
+	</select>
+	
+	<select id="selectByProjectDataSource" resultType="java.util.Map" >
+		SELECT
+			a1.request_type requestType,
+			a1.server_id serverId,
+			a2.auth_id authId
+		FROM
+			t_auth_mapping a1,
+			t_project a2,
+			t_account a4
+		WHERE
+			a1.project_id = a2.project_id
+		AND a2.account_id = a4.account_id
+		AND a1.valid_flag = 1
+		AND a2.valid_flag = 1
+		AND a4.valid_flag = 1
+		<if test="requestUrl != null and requestUrl != ''">
+			AND a1.request_url = #{requestUrl,jdbcType=VARCHAR}
+		</if>
+       <choose>
+            <when test="projectCode != null and projectCode != ''">
+                AND  ((a2.project_code = #{projectCode,jdbcType=VARCHAR}
+                AND a2.is_default = 0) or (
+                a2.project_code = #{dataSource,jdbcType=VARCHAR}
+                AND a2.is_default = 1))
+            </when>
+            <when test="dataSource != null and dataSource != ''">
+                AND a2.project_code = #{dataSource,jdbcType=VARCHAR}
+                AND a2.is_default = 1
+            </when>
+
+        </choose>
+		<if test="appId != null and appId != ''">
+			AND a4.app_id = #{appId,jdbcType=VARCHAR}
+		</if>
+	</select>
+	
+	<select id="selectByProjectDataSourceOriginal" resultType="java.util.Map" >
+	    SELECT
+			g.request_type requestType,
+			g.server_id serverId,
+			g.auth_id authId
+		FROM
+			t_auth_mapping g
+		WHERE
+		    1=1
+		<if test="requestUrl != null and requestUrl != ''">
+			AND g.request_url = #{requestUrl,jdbcType=VARCHAR}
+		</if>
+		AND g.request_type IN (
+			'HISTORY_COMMON',
+			'HISTORY_CUSTOM',
+			'HISTORY_ENCRYPT'
+		)
+		AND g.valid_flag = 1
+	</select>
+
+    <select id="getMappingByAppId" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM t_auth_mapping
+        WHERE mapping_id IN (
+          SELECT mapping_id FROM t_account_auth_mapping WHERE app_id = #{appid,jdbcType=VARCHAR})
+    </select>
+
+</mapper>

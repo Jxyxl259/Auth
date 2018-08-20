@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yaic.auth.thirdparty.dao.ServerDao">
+	<resultMap id="BaseResultMap" type="com.yaic.auth.thirdparty.model.ServerModel">
+		<id column="server_id" jdbcType="INTEGER" property="serverId" />
+		<result column="server_type" jdbcType="VARCHAR" property="serverType" />
+		<result column="server_version" jdbcType="VARCHAR" property="serverVersion" />
+		<result column="server_env" jdbcType="VARCHAR" property="serverEnv" />
+		<result column="server_status" jdbcType="VARCHAR" property="serverStatus" />
+		<result column="system_name" jdbcType="VARCHAR" property="systemName" />
+		<result column="server_url" jdbcType="VARCHAR" property="serverUrl" />
+		<result column="valid_flag" jdbcType="INTEGER" property="validFlag" />
+		<result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+		<result column="created_user" jdbcType="VARCHAR" property="createdUser" />
+		<result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+		<result column="updated_user" jdbcType="VARCHAR" property="updatedUser" />
+	</resultMap>
+	
+	<resultMap id="AuthPubCodeModelMap"
+		type="com.yaic.auth.common.init.model.AuthPubCodeModel">
+		<id column="parameter_id" jdbcType="INTEGER" property="parameterId" />
+		<result column="parameter_name" jdbcType="VARCHAR" property="parameterName" />
+		<result column="parameter_value" jdbcType="VARCHAR" property="parameterValue" />
+		<result column="parameter_describe" jdbcType="VARCHAR"
+			property="parameterDescribe" />
+		<result column="parameter_type" jdbcType="VARCHAR" property="parameterType" />
+		<result column="type_describe" jdbcType="VARCHAR" property="typeDescribe" />
+		<result column="parent_id" jdbcType="INTEGER" property="parentId" />
+		<result column="level" jdbcType="INTEGER" property="level" />
+		<result column="valid_flag" jdbcType="INTEGER" property="validFlag" />
+		<result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+		<result column="created_user" jdbcType="VARCHAR" property="createdUser" />
+		<result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+		<result column="updated_user" jdbcType="VARCHAR" property="updatedUser" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		server_id, server_type, server_version, server_env,
+		server_status, system_name,
+		server_url,
+		valid_flag, created_date,
+		created_user, updated_date, updated_user
+	</sql>
+	<select id="selectOneByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_server
+		where server_id = #{serverId,jdbcType=INTEGER} AND valid_flag = 1
+	</select>
+	<update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		update t_server
+		set valid_flag = 0
+		where server_id = #{serverId,jdbcType=INTEGER} AND 
+		valid_flag = 1
+	</update>
+	<insert id="insert" parameterType="com.yaic.auth.thirdparty.model.ServerModel">
+		insert into t_server
+		(server_id, server_type, server_version,
+		server_env, server_status,
+		system_name,
+		server_url, valid_flag, created_date,
+		created_user,
+		updated_date, updated_user
+		)
+		values (#{serverId,jdbcType=INTEGER},
+		#{serverType,jdbcType=VARCHAR},
+		#{serverVersion,jdbcType=VARCHAR},
+		#{serverEnv,jdbcType=VARCHAR}, #{serverStatus,jdbcType=VARCHAR},
+		#{systemName,jdbcType=VARCHAR},
+		#{serverUrl,jdbcType=VARCHAR},
+		#{validFlag,jdbcType=CHAR},
+		#{createdDate,jdbcType=TIMESTAMP},
+		#{createdUser,jdbcType=VARCHAR}, #{updatedDate,jdbcType=TIMESTAMP},
+		#{updatedUser,jdbcType=VARCHAR}
+		)
+	</insert>
+	<insert id="insertSelective" useGeneratedKeys="true" keyProperty="serverId" parameterType="com.yaic.auth.thirdparty.model.ServerModel">
+		insert into t_server
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="serverId != null and serverId != ''">
+				server_id,
+			</if>
+			<if test="serverType != null and serverType != ''">
+				server_type,
+			</if>
+			<if test="serverVersion != null and serverVersion != ''">
+				server_version,
+			</if>
+			<if test="serverEnv != null and serverEnv != ''">
+				server_env,
+			</if>
+			<if test="serverStatus != null and serverStatus != ''">
+				server_status,
+			</if>
+			<if test="systemName != null and systemName != ''">
+				system_name,
+			</if>
+			<if test="serverUrl != null and serverUrl != ''">
+				server_url,
+			</if>
+			<if test="validFlag != null and validFlag != ''">
+				valid_flag,
+			</if>
+			<if test="createdDate != null">
+				created_date,
+			</if>
+			<if test="createdUser != null and createdUser != ''">
+				created_user,
+			</if>
+			<if test="updatedDate != null">
+				updated_date,
+			</if>
+			<if test="updatedUser != null and updatedUser != ''">
+				updated_user,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="serverId != null and serverId != ''">
+				#{serverId,jdbcType=INTEGER},
+			</if>
+			<if test="serverType != null and serverType != ''">
+				#{serverType,jdbcType=VARCHAR},
+			</if>
+			<if test="serverVersion != null and serverVersion != ''">
+				#{serverVersion,jdbcType=VARCHAR},
+			</if>
+			<if test="serverEnv != null and serverEnv != ''">
+				#{serverEnv,jdbcType=VARCHAR},
+			</if>
+			<if test="serverStatus != null and serverStatus != ''">
+				#{serverStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="systemName != null and systemName != ''">
+				#{systemName,jdbcType=VARCHAR},
+			</if>
+			<if test="serverUrl != null and serverUrl != ''">
+				#{serverUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="validFlag != null and validFlag != ''">
+				#{validFlag,jdbcType=CHAR},
+			</if>
+			<if test="createdDate != null">
+				#{createdDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createdUser != null and createdUser != ''">
+				#{createdUser,jdbcType=VARCHAR},
+			</if>
+			<if test="updatedDate != null">
+				#{updatedDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatedUser != null and updatedUser != ''">
+				#{updatedUser,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.yaic.auth.thirdparty.model.ServerModel">
+		update t_server
+		<set>
+			<if test="serverType != null and serverType != ''">
+				server_type = #{serverType,jdbcType=VARCHAR},
+			</if>
+			<if test="serverVersion != null and serverVersion != ''">
+				server_version = #{serverVersion,jdbcType=VARCHAR},
+			</if>
+			<if test="serverEnv != null and serverEnv != ''">
+				server_env = #{serverEnv,jdbcType=VARCHAR},
+			</if>
+			<if test="serverStatus != null and serverStatus != ''">
+				server_status = #{serverStatus,jdbcType=VARCHAR},
+			</if>
+			<if test="systemName != null and systemName != ''">
+				system_name = #{systemName,jdbcType=VARCHAR},
+			</if>
+			<if test="serverUrl != null and serverUrl != ''">
+				server_url = #{serverUrl,jdbcType=VARCHAR},
+			</if>
+			<if test="validFlag != null and validFlag != ''">
+				valid_flag = #{validFlag,jdbcType=CHAR},
+			</if>
+			<if test="createdDate != null">
+				created_date = #{createdDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createdUser != null and createdUser != ''">
+				created_user = #{createdUser,jdbcType=VARCHAR},
+			</if>
+			<if test="updatedDate != null">
+				updated_date = #{updatedDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatedUser != null and updatedUser != ''">
+				updated_user = #{updatedUser,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where server_id = #{serverId,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.yaic.auth.thirdparty.model.ServerModel">
+		update t_server
+		set server_type = #{serverType,jdbcType=VARCHAR},
+		server_version =
+		#{serverVersion,jdbcType=VARCHAR},
+		server_env =
+		#{serverEnv,jdbcType=VARCHAR},
+		server_status =
+		#{serverStatus,jdbcType=VARCHAR},
+		system_name =
+		#{systemName,jdbcType=VARCHAR},
+		server_url =
+		#{serverUrl,jdbcType=VARCHAR},
+		valid_flag = #{validFlag,jdbcType=CHAR},
+		created_date = #{createdDate,jdbcType=TIMESTAMP},
+		created_user =
+		#{createdUser,jdbcType=VARCHAR},
+		updated_date =
+		#{updatedDate,jdbcType=TIMESTAMP},
+		updated_user =
+		#{updatedUser,jdbcType=VARCHAR}
+		where server_id =
+		#{serverId,jdbcType=INTEGER}
+	</update>
+
+	<select id="selectByConditions" parameterType="com.yaic.auth.thirdparty.model.ServerModel"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_server
+		<trim prefix="WHERE (" suffix=")" prefixOverrides="AND">
+			<if test="serverId != null and serverId != ''">
+				AND server_id = #{serverId,jdbcType=INTEGER}
+			</if>
+			<if test="serverType != null and serverType != ''">
+				AND server_type = #{serverType,jdbcType=VARCHAR}
+			</if>
+			<if test="serverVersion != null and serverVersion != ''">
+				AND server_version like CONCAT('%', #{serverVersion,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="serverEnv != null and serverEnv != ''">
+				AND server_env = #{serverEnv,jdbcType=VARCHAR}
+			</if>
+			<if test="serverStatus != null and serverStatus != ''">
+				AND server_status = #{serverStatus,jdbcType=VARCHAR}
+			</if>
+		    <if test="systemName != null and systemName != ''">
+				AND system_name like CONCAT('%', #{systemName,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="serverUrl != null and serverUrl != ''">
+				AND server_url like CONCAT('%', #{serverUrl,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="1 == 1">
+				AND valid_flag = 1
+			</if>
+			<if test="createdDate != null">
+				AND created_date = #{createdDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createdUser != null and createdUser != ''">
+				AND created_user = #{createdUser,jdbcType=VARCHAR}
+			</if>
+			<if test="updatedDate != null">
+				AND updated_date = #{updatedDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updatedUser != null and updatedUser != ''">
+				AND updated_user = #{updatedUser,jdbcType=VARCHAR}
+			</if>
+		</trim>
+		ORDER BY created_date DESC ,server_id DESC
+	</select>
+
+	<select id="selectOneByServerUrl" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_server where server_url = #{serverUrl,jdbcType=VARCHAR} AND
+		valid_flag = 1
+	</select>
+	
+	<select id="selectAllView" parameterType="com.yaic.auth.thirdparty.model.ServerModel" resultMap="BaseResultMap">
+		SELECT 
+			server_id,t1.server_type,server_version,server_env, 
+			t2.server_status,system_name,server_url,valid_flag
+		FROM t_server t LEFT JOIN 
+		(SELECT parameter_value AS para_value,parameter_describe AS server_type FROM t_auth_pub_code WHERE PARAMETER_TYPE = 'SERVER_MAPPING_SMALL_TYPE') 
+		t1 ON t.server_type = t1.para_value
+		LEFT JOIN 
+		(SELECT parameter_value AS para_value2,parameter_describe AS server_status FROM t_auth_pub_code WHERE PARAMETER_TYPE = 'SERVER_STATUS') 
+		t2 ON t.server_status = t2.para_value2
+		<trim prefix="WHERE (" suffix=")" prefixOverrides="AND">
+			<if test="serverId != null and serverId != ''">
+				AND t.server_id = #{serverId,jdbcType=INTEGER}
+			</if>
+			<if test="serverType != null and serverType != ''">
+				AND t.server_type = #{serverType,jdbcType=VARCHAR}
+			</if>
+			<if test="serverVersion != null and serverVersion != ''">
+				AND t.server_version like CONCAT('%', #{serverVersion,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="serverEnv != null and serverEnv != ''">
+				AND t.server_env = #{serverEnv,jdbcType=VARCHAR}
+			</if>
+			<if test="serverStatus != null and serverStatus != ''">
+				AND t.server_status = #{serverStatus,jdbcType=VARCHAR}
+			</if>
+		    <if test="systemName != null and systemName != ''">
+				AND t.system_name like CONCAT('%', #{systemName,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="serverUrl != null and serverUrl != ''">
+				AND t.server_url like CONCAT('%', #{serverUrl,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="1 == 1">
+				AND t.valid_flag = 1
+			</if>
+		</trim>
+		ORDER BY t.created_date DESC,t.server_id DESC
+	</select>
+</mapper>

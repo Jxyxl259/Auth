@@ -1,0 +1,118 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yaic.auth.common.init.dao.AuthPubCodeDao">
+
+	<resultMap id="BaseResultMap"
+		type="com.yaic.auth.common.init.model.AuthPubCodeModel">
+		<id column="parameter_id" jdbcType="INTEGER" property="parameterId" />
+		<result column="parameter_name" jdbcType="VARCHAR" property="parameterName" />
+		<result column="parameter_value" jdbcType="VARCHAR" property="parameterValue" />
+		<result column="parameter_describe" jdbcType="VARCHAR"
+			property="parameterDescribe" />
+		<result column="parameter_type" jdbcType="VARCHAR" property="parameterType" />
+		<result column="type_describe" jdbcType="VARCHAR" property="typeDescribe" />
+		<result column="parent_id" jdbcType="INTEGER" property="parentId" />
+		<result column="level" jdbcType="INTEGER" property="level" />
+		<result column="valid_flag" jdbcType="INTEGER" property="validFlag" />
+		<result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+		<result column="created_user" jdbcType="VARCHAR" property="createdUser" />
+		<result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+		<result column="updated_user" jdbcType="VARCHAR" property="updatedUser" />
+	</resultMap>
+	
+	<resultMap id="StringValueMap" type="java.lang.String">
+		<result column="parameter_value" jdbcType="VARCHAR" property="parameterValue" />
+	</resultMap>
+
+
+	<sql id="Base_Column_List">
+		parameter_id,
+		parameter_name,
+		parameter_value,
+		parameter_describe,
+		parameter_type,
+		type_describe,
+		parent_id,
+		level,
+		valid_flag,
+		created_date,
+		created_user,
+		updated_date,
+		updated_user
+	</sql>
+
+	<sql id="Table_Name">
+		t_auth_pub_code
+	</sql>
+
+	<select id="selectAll" resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		<include refid="Table_Name" />
+		where valid_flag = 1
+	</select>
+
+	<select id="selectAllByConditions" parameterType="com.yaic.auth.common.init.model.AuthPubCodeModel"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from
+		<include refid="Table_Name" />
+		<trim prefix="where (" suffix=")" prefixOverrides="AND">
+			<if test="parameterId != null and parameter_id != ''">
+				AND parameter_id = #{parameterId,jdbcType=INTEGER}
+			</if>
+			<if test="parameterName != null and parameterName != ''">
+				AND parameter_name = #{parameterName,jdbcType=VARCHAR}
+			</if>
+			<if test="parameterValue != null and parameterValue != ''">
+				AND parameter_value = #{parameterValue,jdbcType=VARCHAR}
+			</if>
+			<if test="parameterDescribe != null and parameterDescribe != ''">
+				AND parameter_describe =
+				#{parameterDescribe,jdbcType=VARCHAR}
+			</if>
+			<if test="parameterType != null and parameterType != ''">
+				AND parameter_type = #{parameterType,jdbcType=VARCHAR}
+			</if>
+			<if test="typeDescribe != null and typeDescribe != ''">
+				AND type_describe = #{typeDescribe,jdbcType=VARCHAR}
+			</if>
+			<if test="parentId != null and parentId != ''">
+				AND parent_id = #{parentId,jdbcType=INTEGER}
+			</if>
+			<if test="level != null and level != ''">
+				AND level = #{level,jdbcType=INTEGER}
+			</if>
+			<if test="validFlag != null and validFlag != ''">
+				AND valid_flag = #{validFlag,jdbcType=INTEGER}
+			</if>
+			<if test="createdDate != null">
+				AND created_date = #{createdDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="createdUser != null and createdUser != ''">
+				AND created_user = #{createdUser,jdbcType=VARCHAR}
+			</if>
+			<if test="updatedDate != null">
+				AND updated_date = #{updatedDate,jdbcType=TIMESTAMP}
+			</if>
+			<if test="updatedUser != null and updatedUser != ''">
+				AND updated_user = #{updatedUser,jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</select>
+	
+	<select id="selectSmallTypeByServerType" parameterType="com.yaic.auth.common.init.model.AuthPubCodeModel"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		FROM t_auth_pub_code t
+		WHERE t.parameter_type = #{parameterType,jdbcType=VARCHAR}
+		AND t.valid_flag = 1 
+    	AND t.parameter_value LIKE CONCAT( #{parameterValue},'-%')
+	</select>
+
+
+
+
+</mapper>

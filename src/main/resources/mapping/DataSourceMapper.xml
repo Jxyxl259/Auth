@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yaic.auth.thirdparty.dao.DataSourceDao">
+	<resultMap id="BaseResultMap"
+		type="com.yaic.auth.thirdparty.model.DataSourceModel">
+		<id column="data_source_id" jdbcType="INTEGER" property="dataSourceId" />
+		<result column="data_source" jdbcType="VARCHAR" property="dataSource" />
+		<result column="source_name" jdbcType="VARCHAR" property="sourceName" />
+		<result column="app_id" jdbcType="VARCHAR" property="appId" />
+		<result column="auth_id" jdbcType="INTEGER" property="authId" />
+		<result column="valid_flag" jdbcType="INTEGER" property="validFlag" />
+		<result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+		<result column="created_user" jdbcType="VARCHAR" property="createdUser" />
+		<result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+		<result column="updated_user" jdbcType="VARCHAR" property="updatedUser" />
+	</resultMap>
+
+	<resultMap id="DataSourceViewMap"
+		type="com.yaic.auth.thirdparty.dto.DataSourceViewDto">
+		<id column="data_source_id" jdbcType="INTEGER" property="dataSourceId" />
+		<result column="data_source" jdbcType="VARCHAR" property="dataSource" />
+		<result column="source_name" jdbcType="VARCHAR" property="sourceName" />
+		<result column="app_id" jdbcType="VARCHAR" property="appId" />
+		<result column="account_name" jdbcType="VARCHAR" property="accountName" />
+		<result column="auth_id" jdbcType="INTEGER" property="authId" />
+		<result column="valid_flag" jdbcType="INTEGER" property="validFlag" />
+		<result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+		<result column="created_user" jdbcType="VARCHAR" property="createdUser" />
+		<result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+		<result column="updated_user" jdbcType="VARCHAR" property="updatedUser" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		data_source_id, data_source, source_name, app_id, auth_id,
+		valid_flag, created_date,
+		created_user, updated_date, updated_user
+	</sql>
+	<select id="selectOneByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_data_source
+		where data_source_id =
+		#{dataSourceId,jdbcType=INTEGER} AND valid_flag = 1
+	</select>
+	<update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		update
+		t_data_source set valid_flag = 0
+		where data_source_id =
+		#{dataSourceId,jdbcType=INTEGER}
+	</update>
+	<insert id="insert" parameterType="com.yaic.auth.thirdparty.model.DataSourceModel">
+		insert into t_data_source
+		(data_source_id, data_source, source_name,
+		app_id, auth_id, valid_flag,
+		created_date, created_user, updated_date,
+		updated_user)
+		values
+		(#{dataSourceId,jdbcType=INTEGER}, #{dataSource,jdbcType=VARCHAR},
+		#{sourceName,jdbcType=VARCHAR},
+		#{appId,jdbcType=VARCHAR},
+		#{authId,jdbcType=INTEGER}, #{validFlag,jdbcType=CHAR},
+		#{createdDate,jdbcType=TIMESTAMP}, #{createdUser,jdbcType=VARCHAR},
+		#{updatedDate,jdbcType=TIMESTAMP},
+		#{updatedUser,jdbcType=VARCHAR})
+	</insert>
+	<insert id="insertSelective" useGeneratedKeys="true"
+		keyProperty="dataSourceId" parameterType="com.yaic.auth.thirdparty.model.DataSourceModel">
+		insert into t_data_source
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="dataSourceId != null and dataSourceId != ''">
+				data_source_id,
+			</if>
+			<if test="dataSource != null and dataSource != ''">
+				data_source,
+			</if>
+			<if test="sourceName != null and sourceName != ''">
+				source_name,
+			</if>
+			<if test="appId != null and appId != ''">
+				app_id,
+			</if>
+			<if test="authId != null and authId != ''">
+				auth_id,
+			</if>
+			<if test="validFlag != null and validFlag != ''">
+				valid_flag,
+			</if>
+			<if test="createdDate != null">
+				created_date,
+			</if>
+			<if test="createdUser != null and createdUser != ''">
+				created_user,
+			</if>
+			<if test="updatedDate != null">
+				updated_date,
+			</if>
+			<if test="updatedUser != null and updatedUser != ''">
+				updated_user,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="dataSourceId != null">
+				#{dataSourceId,jdbcType=INTEGER},
+			</if>
+			<if test="dataSource != null and dataSource != ''">
+				#{dataSource,jdbcType=VARCHAR},
+			</if>
+			<if test="sourceName != null and sourceName != ''">
+				#{sourceName,jdbcType=VARCHAR},
+			</if>
+			<if test="appId != null and appId != ''">
+				#{appId,jdbcType=VARCHAR},
+			</if>
+			<if test="authId != null and authId != ''">
+				#{authId,jdbcType=INTEGER},
+			</if>
+			<if test="validFlag != null and validFlag != ''">
+				#{validFlag,jdbcType=CHAR},
+			</if>
+			<if test="createdDate != null">
+				#{createdDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createdUser != null and createdUser != ''">
+				#{createdUser,jdbcType=VARCHAR},
+			</if>
+			<if test="updatedDate != null">
+				#{updatedDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatedUser != null and updatedUser != ''">
+				#{updatedUser,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.yaic.auth.thirdparty.model.DataSourceModel">
+		update t_data_source
+		<set>
+			<if test="dataSource != null and dataSource != ''">
+				data_source = #{dataSource,jdbcType=VARCHAR},
+			</if>
+			<if test="sourceName != null and sourceName != ''">
+				source_name = #{sourceName,jdbcType=VARCHAR},
+			</if>
+			<if test="appId != null and appId != ''">
+				app_id = #{appId,jdbcType=VARCHAR},
+			</if>
+			<if test="authId != null and authId != ''">
+				auth_id = #{authId,jdbcType=INTEGER},
+			</if>
+			<if test="validFlag != null and validFlag != ''">
+				valid_flag = #{validFlag,jdbcType=CHAR},
+			</if>
+			<if test="createdDate != null">
+				created_date = #{createdDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createdUser != null and createdUser != ''">
+				created_user = #{createdUser,jdbcType=VARCHAR},
+			</if>
+			<if test="updatedDate != null">
+				updated_date = #{updatedDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatedUser != null and updatedUser != ''">
+				updated_user = #{updatedUser,jdbcType=VARCHAR},
+			</if>
+		</set>
+		where data_source_id = #{dataSourceId,jdbcType=INTEGER}
+	</update>
+
+	<update id="updateByPrimaryKey" parameterType="com.yaic.auth.thirdparty.model.DataSourceModel">
+		update
+		t_data_source
+		set data_source = #{dataSource,jdbcType=VARCHAR},
+		source_name = #{sourceName,jdbcType=VARCHAR},
+		app_id =
+		#{appId,jdbcType=VARCHAR},
+		auth_id = #{authId,jdbcType=INTEGER},
+		valid_flag = #{validFlag,jdbcType=CHAR},
+		created_date =
+		#{createdDate,jdbcType=TIMESTAMP},
+		created_user =
+		#{createdUser,jdbcType=VARCHAR},
+		updated_date =
+		#{updatedDate,jdbcType=TIMESTAMP},
+		updated_user =
+		#{updatedUser,jdbcType=VARCHAR}
+		where data_source_id =
+		#{dataSourceId,jdbcType=INTEGER}
+	</update>
+
+	<select id="getLists" parameterType="com.yaic.auth.thirdparty.model.DataSourceModel"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_data_source
+		<trim prefix="WHERE (" suffix=")" prefixOverrides="AND">
+			<if test="dataSourceId != null ">
+				AND data_source_id = #{dataSourceId,jdbcType=VARCHAR}
+			</if>
+			<if test="dataSource != null and dataSource != ''">
+				AND data_source like CONCAT('%', #{dataSource}, '%')
+			</if>
+			<if test="sourceName != null and sourceName != ''">
+				AND source_name like CONCAT('%', #{sourceName}, '%')
+			</if>
+			<if test="appId != null and appId != ''">
+				AND app_id = #{appId,jdbcType=VARCHAR}
+			</if>
+			<if test="authId != null and authId != ''">
+				AND auth_id = #{authId,jdbcType=INTEGER}
+			</if>
+			<if test="1 == 1">
+				AND valid_flag = 1
+			</if>
+		</trim>
+		ORDER BY created_date DESC ,data_source_id DESC
+	</select>
+
+	<select id="selectOneByDataSource" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_data_source
+		where data_source = #{dataSource}
+	</select>
+	<select id="selectDataSourceView" parameterType="com.yaic.auth.thirdparty.model.DataSourceModel"
+		resultMap="DataSourceViewMap">
+		select
+		d.data_source_id,
+		d.data_source,
+		d.source_name,
+		d.app_id,
+		a.account_name,
+		d.auth_id,
+		d.valid_flag,
+		d.created_date,
+		d.created_user,
+		d.updated_date,
+		d.updated_user
+		from t_data_source d left outer join t_account a on
+		d.app_id = a.app_id
+		and a.valid_flag = 1
+		<trim prefix="WHERE (" suffix=")" prefixOverrides="AND">
+			<if test="dataSource != null and dataSource != ''">
+				AND data_source like CONCAT('%',
+				#{dataSource,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="sourceName != null and sourceName != ''">
+				AND source_name like CONCAT('%',
+				#{sourceName,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="1 == 1">
+				AND d.valid_flag = 1
+			</if>
+		</trim>
+		ORDER BY created_date DESC ,data_source_id DESC
+	</select>
+
+
+
+</mapper>

@@ -1,0 +1,9 @@
+spring:
+  #配置文件环境
+  profiles:
+    active: @profileActive@
+
+#mybatis加载
+mybatis:
+  mapper-locations: classpath:mapping/*.xml
+  type-aliases-package: com.yaic.auth.*.model,com.yaic.quartz.dto.domain

@@ -1,0 +1,250 @@
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yaic.auth.thirdparty.dao.AccountDao">
+
+	<resultMap id="BaseResultMap" type="com.yaic.auth.thirdparty.model.AccountModel">
+		<id column="account_id" jdbcType="INTEGER" property="accountId" />
+		<result column="account_name" jdbcType="VARCHAR" property="accountName" />
+		<result column="app_id" jdbcType="VARCHAR" property="appId" />
+		<result column="mobile" jdbcType="VARCHAR" property="mobile" />
+		<result column="email" jdbcType="VARCHAR" property="email" />
+		<result column="app_code" jdbcType="VARCHAR" property="appCode" />
+		<result column="valid_flag" jdbcType="INTEGER" property="validFlag" />
+		<result column="created_date" jdbcType="TIMESTAMP" property="createdDate" />
+		<result column="created_user" jdbcType="VARCHAR" property="createdUser" />
+		<result column="updated_date" jdbcType="TIMESTAMP" property="updatedDate" />
+		<result column="updated_user" jdbcType="VARCHAR" property="updatedUser" />
+	</resultMap>
+
+
+	<sql id="Base_Column_List">
+		account_id, account_name, app_id, mobile, email, app_code,
+		valid_flag,
+		created_date,
+		created_user, updated_date, updated_user
+	</sql>
+
+	<select id="selectByPrimaryKey" parameterType="java.lang.Integer"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_account
+		where account_id = #{accountId,jdbcType=INTEGER}
+	</select>
+
+	<select id="getOneByAppid" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_account
+		where app_id = #{appId} and valid_flag = 1
+	</select>
+
+	<select id="getOneByAppCode" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_account
+		where app_code = #{appCode} and valid_flag = 1
+	</select>
+
+	<update id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		update t_account
+		set valid_flag = 0 where account_id =
+		#{accountId,jdbcType=INTEGER}
+	</update>
+
+	<update id="deleteInfoByIds" parameterType="java.lang.String">
+		update t_account set valid_flag = 0 where account_id in
+		<foreach collection="idLists" item="item" index="index" open="("
+			close=")" separator=",">
+			'${item}'
+		</foreach>
+
+	</update>
+
+	<insert id="insert" parameterType="com.yaic.auth.thirdparty.model.AccountModel">
+		insert into t_account
+		(account_id, account_name, app_id,
+		mobile, email, app_code,
+		valid_flag,
+		created_date, created_user,
+		updated_date, updated_user)
+		values
+		(#{accountId,jdbcType=INTEGER}, #{accountName,jdbcType=VARCHAR},
+		#{appId,jdbcType=VARCHAR},
+		#{mobile,jdbcType=VARCHAR},
+		#{email,jdbcType=VARCHAR}, #{appCode,jdbcType=VARCHAR},
+		#{validFlag,jdbcType=CHAR}, #{createdDate,jdbcType=TIMESTAMP},
+		#{createdUser,jdbcType=VARCHAR},
+		#{updatedDate,jdbcType=TIMESTAMP},
+		#{updatedUser,jdbcType=VARCHAR})
+	</insert>
+
+	<insert id="insertSelective" useGeneratedKeys="true" keyProperty="accountId" parameterType="com.yaic.auth.thirdparty.model.AccountModel">
+		insert into t_account
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="accountId != null and accountId != ''">
+				account_id,
+			</if>
+			<if test="accountName != null and accountName != ''">
+				account_name,
+			</if>
+			<if test="appId != null and appId != ''">
+				app_id,
+			</if>
+			<if test="mobile != null and mobile != ''">
+				mobile,
+			</if>
+			<if test="email != null and email != ''">
+				email,
+			</if>
+			<if test="appCode != null and appCode != ''">
+				app_code,
+			</if>
+			<if test="validFlag != null and validFlag != ''">
+				valid_flag,
+			</if>
+			<if test="createdDate != null">
+				created_date,
+			</if>
+			<if test="createdUser != null and createdUser != ''">
+				created_user,
+			</if>
+			<if test="updatedDate != null">
+				updated_date,
+			</if>
+			<if test="updatedUser != null and updatedUser != ''">
+				updated_user,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="accountId != null and accountId != ''">
+				#{accountId,jdbcType=INTEGER},
+			</if>
+			<if test="accountName != null and accountName != ''">
+				#{accountName,jdbcType=VARCHAR},
+			</if>
+			<if test="appId != null and appId != ''">
+				#{appId,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null and mobile != ''">
+				#{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null and email != ''">
+				#{email,jdbcType=VARCHAR},
+			</if>
+			<if test="appCode != null and appCode != ''">
+				#{appCode,jdbcType=VARCHAR},
+			</if>
+			<if test="validFlag != null and validFlag != ''">
+				#{validFlag,jdbcType=CHAR},
+			</if>
+			<if test="createdDate != null">
+				#{createdDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createdUser != null and createdUser != ''">
+				#{createdUser,jdbcType=VARCHAR},
+			</if>
+			<if test="updatedDate != null">
+				#{updatedDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatedUser != null and updatedUser != ''">
+				#{updatedUser,jdbcType=VARCHAR},
+			</if>
+		</trim>
+	</insert>
+
+	<update id="updateByPrimaryKeySelective" parameterType="com.yaic.auth.thirdparty.model.AccountModel">
+		update t_account
+		<set>
+			<if test="accountId != null and accountId != ''">
+				account_id = #{accountId,jdbcType=INTEGER },
+			</if>
+			<if test="accountName != null and accountName != ''">
+				account_name = #{accountName,jdbcType=VARCHAR},
+			</if>
+			<if test="appId != null and appId != ''">
+				app_id = #{appId,jdbcType=VARCHAR},
+			</if>
+			<if test="mobile != null">
+				mobile = #{mobile,jdbcType=VARCHAR},
+			</if>
+			<if test="email != null">
+				email = #{email,jdbcType=VARCHAR},
+			</if>
+			<if test="appCode != null and appCode != ''">
+				app_code = #{appCode,jdbcType=VARCHAR},
+			</if>
+			<if test="validFlag != null and validFlag != null">
+				valid_flag = #{validFlag,jdbcType=CHAR},
+			</if>
+			<if test="createdDate != null">
+				created_date = #{createdDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="createdUser != null and createdUser != ''">
+				created_user = #{createdUser,jdbcType=VARCHAR},
+			</if>
+			<if test="updatedDate != null">
+				updated_date = #{updatedDate,jdbcType=TIMESTAMP},
+			</if>
+			<if test="updatedUser != null and updatedUser != ''">
+				updated_user = #{updatedUser,jdbcType=VARCHAR}
+			</if>
+		</set>
+		where account_id = #{accountId,jdbcType=INTEGER}
+	</update>
+
+	<update id="updateByPrimaryKey" parameterType="com.yaic.auth.thirdparty.model.AccountModel">
+		update t_account
+		set account_name = #{accountName,jdbcType=VARCHAR},
+		app_id =
+		#{appId,jdbcType=VARCHAR},
+		mobile = #{mobile,jdbcType=VARCHAR},
+		email =
+		#{email,jdbcType=VARCHAR},
+		app_code = #{appCode,jdbcType=VARCHAR},
+		valid_flag = #{validFlag,jdbcType=CHAR},
+		created_date =
+		#{createdDate,jdbcType=TIMESTAMP},
+		created_user =
+		#{createdUser,jdbcType=VARCHAR},
+		updated_date =
+		#{updatedDate,jdbcType=TIMESTAMP},
+		updated_user =
+		#{updatedUser,jdbcType=VARCHAR}
+		where account_id =
+		#{accountId,jdbcType=INTEGER}
+	</update>
+
+	<select id="getLists" parameterType="com.yaic.auth.thirdparty.model.AccountModel"
+		resultMap="BaseResultMap">
+		select
+		<include refid="Base_Column_List" />
+		from t_account t
+		<trim prefix="WHERE (" suffix=")" prefixOverrides="AND |OR ">
+			<if test="appId != null and appId != ''">
+				and app_id like CONCAT('%', #{appId}, '%')
+			</if>
+			<if test="accountName != null and accountName != ''">
+				and account_name like CONCAT('%', #{accountName}, '%')
+			</if>
+			<if test="appCode != null and appCode != ''">
+				and app_code like CONCAT('%', #{appCode}, '%')
+			</if>
+			<if test="mobile != null and mobile != ''">
+				and mobile like CONCAT('%', #{mobile}, '%')
+			</if>
+			<if test="email != null and email != ''">
+				and email like CONCAT('%', #{email}, '%')
+			</if>
+			<if test="1==1">
+				and valid_flag = 1
+			</if>
+		</trim>
+		ORDER BY t.created_date DESC ,t.account_id DESC 
+	</select>
+
+
+
+
+</mapper>
