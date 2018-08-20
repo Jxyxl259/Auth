@@ -100,6 +100,7 @@ public class OAuthServiceImpl implements OAuthService {
                 authEncryptModel.setAuthId(oneProject.getAuthId());
                 List<AuthEncryptModel> encryList1 = authEncryptService.getList(authEncryptModel);
                 encryList = encryList1;
+                logger.info("query auth_encrypt by dataSource,count[{}]",encryList.size());
             }
             if(StringUtil.isNotEmpty(projectCode)) {
                 projectModel.setIsDefault(0);
@@ -108,11 +109,16 @@ public class OAuthServiceImpl implements OAuthService {
                 authEncryptModel.setAuthId(oneProject.getAuthId());
                 List<AuthEncryptModel> encryList2 = authEncryptService.getList(authEncryptModel);
                 encryList.addAll(encryList2);
+                logger.info("query auth_encrypt by project,count[{}]",encryList.size());
             }
-        } else {
-            authEncryptModel.setAppId(appId);
-            encryList = authEncryptService.getList(authEncryptModel);
         }
+
+        authEncryptModel.setAuthId(null);
+        authEncryptModel.setAppId(appId);
+        List<AuthEncryptModel> encryList3 = authEncryptService.getList(authEncryptModel);
+        encryList3 = authEncryptService.getList(authEncryptModel);
+        encryList.addAll(encryList3);
+        logger.info("query auth_encrypt by appId,count[{}]",encryList.size());
 
 		if (ToolsUtils.isEmpty(encryList)) {
 			logger.warn("can not find encrypt info, appid:{}.", appId);
